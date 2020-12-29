@@ -1,0 +1,27 @@
+# This simple program is to determine/list all prime numbers within a given number.
+
+def prime_number_in_range(number):
+    # number = int(input("Please enter a number: "))
+    number_list = [2]
+
+    if number > 1:
+        for aa in range(2, number + 1):
+            for i in range(2, aa):
+                if (aa % i) == 0:
+                    break
+            else:   # this is a for-else condition
+                if aa not in number_list:
+                    number_list.append(aa)
+        print(f'There are {len(number_list)} prime numbers from 1 to {number}')
+        print(f'These numbers are: {number_list}')
+
+    else:
+        print(f'There is no prime number for 1, 0 or negative number!')
+
+
+def main():
+    number = int(input("Please enter a number: "))
+    prime_number_in_range(number)
+
+
+main()
