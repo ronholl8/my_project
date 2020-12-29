@@ -2,24 +2,24 @@
 
 import random
 
-def guess(x):
-    guess = int(input(f'Guess a secret number between 1 and {x}: '))
-    secret_number = random.randint(1, x)
+def guess(low, high):
+    guess = None
+    secret_number = random.randint(low, high)
     guess_count = 0
     while guess != secret_number:
+        guess = int(input(f'Guess a secret number between {low} and {high}: '))
         if guess > secret_number:
             print('Your number is too HIGH, try again!')
             guess_count += 1
-            guess = int(input(f'Guess a secret number between 1 and {x}: '))
         else:
             print('Your number is too LOW try again!')
             guess_count += 1
-            guess = int(input(f'Guess a secret number between 1 and {x}: '))
     else:
-        print(f'Congrats! You have tried {guess_count + 1} times and you guessed it right, the secret number is {secret_number}.')
+        print(f'Congrats! You have tried {guess_count} times and you guessed it right, the secret number is {secret_number}.')
 
 def main():
-    number_range = int(input('Please input your secret number range, 1 to ?: '))
-    guess(number_range)
+    low = int(input('The secret number should start from: '))
+    high = int(input('to: '))
+    guess(low, high)
 
 main()
