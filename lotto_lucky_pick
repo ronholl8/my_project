@@ -1,0 +1,30 @@
+import random
+
+
+class Lotto:
+
+    def __init__(self):
+        self._pick = 0
+
+    def lucky_pick(self, lower, upper, picks):
+        lucky_number = []
+        while len(lucky_number) < picks:
+            pick = random.randint(lower, upper)
+            if pick not in lucky_number:
+                lucky_number.append(pick)
+        return sorted(lucky_number)
+
+    def pick_set(self, lower, upper, picks, sets):
+        for i in range(sets):
+            print("Pick", i + 1, "-", self.lucky_pick(lower, upper, picks))
+
+def main():
+    lower = int(input('Lowest number? '))
+    upper = int(input('Highest number? '))
+    picks = int(input('How many numbers to pick? '))
+    sets = int(input('How many sets of number? '))
+    pick = Lotto()
+    pick.pick_set(lower, upper, picks, sets)
+
+
+main()
