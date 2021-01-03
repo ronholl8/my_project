@@ -1,0 +1,74 @@
+##
+# This module defines the CashRegister class.
+#
+
+## A simulated cash register that tracks the item count and the total amount due.
+#
+class CashRegister:
+    ## Constructs a cash register with cleared item count and total.
+    #
+    def __init__(self):
+        self._itemCount = 0
+        self._totalPrice = 0
+
+    ## Adds an item to this cash register.
+    # @param price the price of the item
+    #
+    def addItem(self, price):
+        self._itemCount = self._itemCount + 1
+        self._totalPrice = self._totalPrice + price
+
+    ## Gets the price of all items in the current sale.
+    # return the total price
+    #
+    def getTotal(self):
+        return self._totalPrice
+
+    ## Gets the number of items in the current sale.
+    # return the item count
+    #
+    def getCount(self):
+        return self._itemCount
+
+    ## Gets the amount of the total sale as a dollar without cents.
+    # return the total sale amount as integer
+    #
+    def getDollor(self):
+        return int(self._totalPrice)
+
+    ## Clears the item count and the total.
+    #
+    def clear(self):
+        self._itemCount = 0
+        self._totalPrice = 0
+
+    ## Gets change for provided payment and resets for next sale.
+    # @param payment payment amount for current sale.
+    # return the change amount
+    def giveChange(self, payment):
+        change = payment - self._totalPrice
+        self.clear()
+        return change
+
+
+def main():
+    shopping = CashRegister()
+    done = False
+    while not done:
+        add_to = input('Would you like to add this item to your shopping cart?(Y/N) ')
+        add_to = add_to.lower()
+        if add_to == "y":
+            item_price = float(input("This item costs $: "))
+            shopping.addItem(item_price)
+        elif add_to == "n":
+            done = True
+        else:
+            print("Sorry! I don't understand")
+
+    print(f"You have total {shopping.getCount()} items.")
+    print('The total due is: $%.2f' % shopping.getTotal())
+    payment = float(input("You are paying $: "))
+    print('Balance is: $%.2f' % shopping.giveChange(payment))
+
+
+main()
