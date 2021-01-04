@@ -1,0 +1,26 @@
+##
+# This program draws an Italian flag using the ezgraphics module.
+#
+
+from ezgraphics import GraphicsWindow
+
+win = GraphicsWindow(500, 500)
+canvas = win.canvas()
+
+# Define variables with the upper-left position and the size.
+xLeft = 80
+yLeft = 80
+width = 360
+height = 240
+
+# Draw the flag.
+canvas.setOutline("black")
+canvas.drawRect(xLeft, yLeft, width, height / 3)
+
+canvas.setColor("blue")
+canvas.drawRect(xLeft, yLeft + height / 3, width, height / 3)
+
+canvas.setColor("red")
+canvas.drawRect(xLeft, yLeft + height * 2 / 3, width, height / 3)
+
+win.wait()
