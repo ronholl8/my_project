@@ -1,0 +1,77 @@
+import random
+
+
+# Generates the random 4 digits number.
+def number_range(passcode_range):
+    passcode = [random.randint(1, passcode_range) for x in range(4)]
+    for y in range(len(passcode)):
+        passcode[y] = str(passcode[y])
+    return passcode
+
+
+# Ask for player input.
+def player_guess(passcode_range):
+    guess_list = []
+    done = False
+    while not done:
+        guess = input(f"Guess 4 numbers ranging from 1 to {passcode_range}:\n>> ")
+        if guess.isnumeric() == False:
+            print('Opp! NUMBER only!!')
+        elif len(guess) != 4:
+            print('Only input 4 numbers!')
+        else:
+            # print(guess, type(guess), len(guess))
+            for i in range(len(guess)):
+                guess_list.append(guess[i])
+            # print(guess_list)
+            done = True
+
+    return guess_list
+
+
+# Provide feedback
+def feedback(passcode, guess_list):
+    correct_position = 0
+    wrong_position = 0
+    # winning = False
+    # while not winning:
+    if guess_list == passcode:
+        winning = True
+    else:
+        # duplicate passcode
+        guess_list2 = guess_list.copy()
+        passcode2 = passcode.copy()
+        for m in range(len(guess_list2)):
+            if guess_list2[m] == passcode2[m]:
+                correct_position += 1
+                # once correct number is matched, to eliminate recurrence
+                guess_list2[m] = 'na'
+                passcode2[m] = 'nb'
+        # print(guess_list2)
+        # print(passcode2)
+        for n in range(len(guess_list2)):
+            if guess_list2[n] in passcode2:
+                wrong_position += 1
+                passcode2.remove(guess_list2[n])
+            # else:
+            #     pass
+        print('Good attempt! Your guess:', guess_list, '\tFeedback:', correct_position * '✔', wrong_position * '❓',
+              '\n(✔ - correct number & position; ❓ - correct number but wrong position)')
+        winning = False
+    return winning
+
+
+def main():
+    noRange = int(input('What is the number range you want do challenge, from 1 to: '))
+    x = number_range(noRange)
+    # print(x)
+    y = player_guess(noRange)
+    counter = 1
+    while feedback(x, y) == False:
+        y = player_guess(noRange)
+        counter += 1
+    else:
+        print(f'Congrats, the secret no is {x}. You have tried {counter} times and WON!!!')
+
+
+main()
