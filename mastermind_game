@@ -1,77 +1,116 @@
 import random
 
 
-# Generates the random 4 digits number.
-def number_range(passcode_range):
-    passcode = [random.randint(1, passcode_range) for x in range(4)]
-    for y in range(len(passcode)):
-        passcode[y] = str(passcode[y])
-    return passcode
+class Mastermind:
+    def __init__(self):
+        self.digRange = 4
+        self.noRange = 6
+        self.counter = 1
+        self.passcode = []
+        self.guess_list = []
+
+    def player_decide(self):
+        while True:
+            try:
+                self.digRange = int(input('How many BLANKS do you want to challenge? '))
+                break
+            except ValueError:
+                print('Error! NUMBER only!')
+
+        while True:
+            try:
+                self.noRange = int(input('What is the number range you want to challenge, from 1 to: '))
+                break
+            except ValueError:
+                print('Error! NUMBER only!')
 
 
-# Ask for player input.
-def player_guess(passcode_range):
-    guess_list = []
-    done = False
-    while not done:
-        guess = input(f"Guess 4 numbers ranging from 1 to {passcode_range}:\n>> ")
-        if guess.isnumeric() == False:
-            print('Opp! NUMBER only!!')
-        elif len(guess) != 4:
-            print('Only input 4 numbers!')
+    def create_passcode(self):
+        self.passcode = [random.randint(1, self.noRange) for x in range(self.digRange)]
+        # convert integer to list of string
+        for y in range(len(self.passcode)):
+            self.passcode[y] = str(self.passcode[y])
+        return self.passcode
+
+
+    def player_guess(self):
+        done = False
+        while not done:
+            guess = input(f"Attempt {self.counter}: Guess {self.digRange} numbers ranging from 1 to {self.noRange}:\n>> ")
+            if guess.isnumeric() == False:
+                print('Opp! NUMBER only!!')
+            elif len(guess) != self.digRange:
+                print(f'Must input {self.digRange} numbers!')
+            else:
+                for i in range(len(guess)):
+                    self.guess_list.append(guess[i])
+                done = True
+        return self.guess_list
+
+
+    def feedback(self):
+        correct_position = 0
+        wrong_position = 0
+        if self.guess_list == self.passcode:
+            winning = True
         else:
-            # print(guess, type(guess), len(guess))
-            for i in range(len(guess)):
-                guess_list.append(guess[i])
-            # print(guess_list)
-            done = True
-
-    return guess_list
-
-
-# Provide feedback
-def feedback(passcode, guess_list):
-    correct_position = 0
-    wrong_position = 0
-    # winning = False
-    # while not winning:
-    if guess_list == passcode:
-        winning = True
-    else:
-        # duplicate passcode
-        guess_list2 = guess_list.copy()
-        passcode2 = passcode.copy()
-        for m in range(len(guess_list2)):
-            if guess_list2[m] == passcode2[m]:
-                correct_position += 1
-                # once correct number is matched, to eliminate recurrence
-                guess_list2[m] = 'na'
-                passcode2[m] = 'nb'
-        # print(guess_list2)
-        # print(passcode2)
-        for n in range(len(guess_list2)):
-            if guess_list2[n] in passcode2:
-                wrong_position += 1
-                passcode2.remove(guess_list2[n])
-            # else:
-            #     pass
-        print('Good attempt! Your guess:', guess_list, '\tFeedback:', correct_position * '✔', wrong_position * '❓',
-              '\n(✔ - correct number & position; ❓ - correct number but wrong position)')
-        winning = False
-    return winning
+            # duplicate passcode
+            guess_list2 = self.guess_list.copy()
+            passcode2 = self.passcode.copy()
+            for m in range(len(guess_list2)):
+                if guess_list2[m] == passcode2[m]:
+                    correct_position += 1
+                    # once correct number is matched, to eliminate recurrence
+                    guess_list2[m] = 'na'
+                    passcode2[m] = 'nb'
+            for n in range(len(guess_list2)):
+                if guess_list2[n] in passcode2:
+                    wrong_position += 1
+                    passcode2.remove(guess_list2[n])
+            print('Good try! Your guess:', self.guess_list, '\tFeedback:', correct_position * '✔', wrong_position * '❓',
+                  '\n(✔ - correct number & position; ❓ - correct number but wrong position)')
+            self.guess_list.clear() # to clear the value of initial variable
+            winning = False
+        return winning
 
 
 def main():
-    noRange = int(input('What is the number range you want do challenge, from 1 to: '))
-    x = number_range(noRange)
-    # print(x)
-    y = player_guess(noRange)
-    counter = 1
-    while feedback(x, y) == False:
-        y = player_guess(noRange)
-        counter += 1
+    # Intro
+    game = Mastermind()
+    print('MASTERMIND game mode default setting:  (4) digits & (6) numbers range.')
+    # Player to decide game mode
+    while True:
+        decide = input('(P)lay or (C)hange? ').lower()
+        if decide == 'p':
+            game.digRange, game.noRange = 4, 6
+            break
+        elif decide == 'c':
+            game.player_decide()
+            break
+        else:
+            print('Error!')
+            decide = input('(P)lay or (C)hange? ').lower()
+    # print(game.digRange, game.noRange)
+    # Create random passcode
+    game.create_passcode()
+    # print(game.create_passcode())
+    # Player provide guess list
+    game.player_guess()
+    # MASTERMIND gives clue
+    while not game.feedback():
+        game.counter += 1
+        game.player_guess()
     else:
-        print(f'Congrats, the secret no is {x}. You have tried {counter} times and WON!!!')
+        print(f'Congrats, MASTERMIND code is {game.passcode}. You have tried {game.counter} times and WON!!!')
+    # Continue playing?
+    next_game = input('Continue playing?(Y/N) ').lower()
+    if next_game == 'y':
+        main()
+    elif next_game == 'n':
+        print('Bye! Bye!')
+    else:
+        print('You LOSER... Game terminated! 👎')
+
 
 
 main()
