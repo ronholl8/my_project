@@ -26,10 +26,10 @@ class Mastermind:
 
 
     def create_passcode(self):
-        self.passcode = [random.randint(1, self.noRange) for x in range(self.digRange)]
+        self.passcode = [random.randint(1, self.noRange) for a in range(self.digRange)]
         # convert integer to list of string
-        for y in range(len(self.passcode)):
-            self.passcode[y] = str(self.passcode[y])
+        for b in range(len(self.passcode)):
+            self.passcode[b] = str(self.passcode[b])
         return self.passcode
 
 
@@ -43,8 +43,14 @@ class Mastermind:
                 print(f'Must input {self.digRange} numbers!')
             else:
                 for i in range(len(guess)):
-                    self.guess_list.append(guess[i])
-                done = True
+                    if guess[i] == '0' or int(guess[i]) > self.noRange:
+                        print(f'Error! NUMBER must between 1 to {self.noRange}')
+                        self.guess_list.clear() # always refresh guess_list for feedback() later
+                        done = False    # ensure stay in while loop after break
+                        break   # out from the for loop
+                    else:
+                        self.guess_list.append(guess[i])
+                        done = True
         return self.guess_list
 
 
@@ -67,7 +73,7 @@ class Mastermind:
                 if guess_list2[n] in passcode2:
                     wrong_position += 1
                     passcode2.remove(guess_list2[n])
-            print('Good try! Your guess:', self.guess_list, '\tFeedback:', correct_position * '✔', wrong_position * '❓',
+            print('You guess:', self.guess_list, '\tFeedback:', correct_position * '✔', wrong_position * '❓',
                   '\n(✔ - correct number & position; ❓ - correct number but wrong position)')
             self.guess_list.clear() # to clear the value of initial variable
             winning = False
@@ -89,7 +95,6 @@ def main():
             break
         else:
             print('Error!')
-            decide = input('(P)lay or (C)hange? ').lower()
     # print(game.digRange, game.noRange)
     # Create random passcode
     game.create_passcode()
@@ -109,8 +114,7 @@ def main():
     elif next_game == 'n':
         print('Bye! Bye!')
     else:
-        print('You LOSER... Game terminated! 👎')
-
+        print('You LooooSER... Game terminated! 👎')
 
 
 main()
