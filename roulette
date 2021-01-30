@@ -1,0 +1,34 @@
+import numpy as np
+import pandas as pd
+
+## Simulation of French Roulette. Calculating even no bet percentage.
+kind = pd.read_excel('roulette.xlsx', header=None)
+kind.columns = ['Number', 'R/B', 'B/S', "O/E"]  # add column names
+# print(kind)
+# print(kind.dtypes)
+user_input = int(input('Enter sample size: '))
+opening = np.random.randint(0, 37, user_input)
+kind2 = pd.DataFrame(opening)
+kind2.columns = ['Number']
+# print(kind2)
+df = pd.merge(kind2, kind, on='Number', how='left')  # to do a vLookup in Python using pandas.
+# print(df, df.shape)
+if 0 in opening:
+    zero = df['Number'].value_counts().loc[0]
+    print(f'Zero:\t{zero}\t', '%.2f' % (zero / len(opening) * 100), '%')
+else:
+    pass
+
+red = df['R/B'].value_counts().loc['red']
+black = df['R/B'].value_counts().loc['black']
+big = df['B/S'].value_counts().loc['big']
+small = df['B/S'].value_counts().loc['small']
+odd = df['O/E'].value_counts().loc['odd']
+even = df['O/E'].value_counts().loc['even']
+
+print(f'Red:\t{red}\t', '%.2f' % (red / len(opening) * 100), '%')
+print(f'Black:\t{black}\t', '%.2f' % (black / len(opening) * 100), '%')
+print(f'Big:\t{big}\t', '%.2f' % (big / len(opening) * 100), '%')
+print(f'Small:\t{small}\t', '%.2f' % (small / len(opening) * 100), '%')
+print(f'Odd:\t{odd}\t', '%.2f' % (odd / len(opening) * 100), '%')
+print(f'Even:\t{even}\t', '%.2f' % (even / len(opening) * 100), '%')
